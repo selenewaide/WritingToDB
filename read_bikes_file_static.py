@@ -18,7 +18,7 @@ else:
 
 print("Reading files from ", directory)
 
-for filename in os.listdir(directory):
+for filename in sorted(os.listdir(directory)):
     suffix_bike = "bikes.JSON"
     if not filename.endswith(suffix_bike):
         continue
