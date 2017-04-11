@@ -32,10 +32,11 @@ for filename in os.listdir(directory):
                 get_max_timestamp = "SELECT MAX(last_update) AS max_num  FROM BikeAndWeather.StationsDynamicTestCopy WHERE station = " + str(each_station['number'])
                 cursor.execute(get_max_timestamp)
                 result = cursor.fetchone()
-            max_timestamp = float(result[0])
+            max_timestamp = result[0]
             
             if max_timestamp is None:
-                max_timestamp = 0.0
+                max_timestamp = 0
+            max_timestamp = float(max_timestamp)
         
             if (each_station['last_update']/1000) > max_timestamp:
                 
