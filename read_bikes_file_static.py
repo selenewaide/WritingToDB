@@ -12,7 +12,7 @@ connection = pymysql.connect(host='bikeandweather.cnkbtyr1hegq.us-east-1.rds.ama
                              password='Conv2017',
                              db='BikeAndWeather')
 if len(sys.argv) > 1:
-    directory = sys.argv[0]
+    directory = sys.argv[1]
 else:
     directory = "."
 
