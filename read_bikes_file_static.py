@@ -23,7 +23,7 @@ for filename in os.listdir(directory):
     if not filename.endswith(suffix_bike):
         continue
         
-    with open(filename) as json_bike_data:
+    with open(directory + '/' + filename) as json_bike_data:
         print(filename)
         bike_data = json.load(json_bike_data)
         
@@ -32,13 +32,13 @@ for filename in os.listdir(directory):
                 get_max_timestamp = "SELECT MAX(last_update) AS max_num  FROM BikeAndWeather.StationsDynamicTestCopy WHERE station = " + str(each_station['number'])
                 cursor.execute(get_max_timestamp)
                 result = cursor.fetchone()
-            max_timestamp = result[0]
+            max_timestamp = float(result[0])
             
             if max_timestamp is None:
-                max_timestamp = 0
+                max_timestamp = 0.0
         
             if (each_station['last_update']/1000) > max_timestamp:
-            
+                
                 with connection.cursor() as cursor:
                     # Create a new record
                     sql = "INSERT INTO `StationsDynamicTestCopy` (`station`, `status`, `available_bike_stands`,`available_bikes`, `last_update`) VALUES (%s, %s, %s, %s, %s)"
@@ -47,7 +47,8 @@ for filename in os.listdir(directory):
                     # connection is not autocommit by default. So you must commit to save
                     # your changes.
                     connection.commit()
-                
+            else:
+                print("Skipping station ", each_station['number'], " because ", max_timestamp, " is greater than ", each_station['last_update']/1000)
         
         
 # MAX(last_update) AS max_num  FROM BikeAndWeather.StationsDynamicTestCopy WHERE station = 42      
