@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 '''
-Reads each bike JSON file, and writes data into the static station table.
+Reads each bike JSON file, and writes data into the dynamic station table.
 Checks for duplicate station/timestamp combinations and ignores these.
 '''
 
@@ -39,7 +39,7 @@ for filename in sorted(os.listdir(directory)):
         # gets the max timestamp for each station - to avoid duplicates from previous files read in
         for each_station in data_from_file:
             with connection.cursor() as cursor:
-                get_max_timestamp = "SELECT MAX(last_update) AS max_num  FROM BikeAndWeather.StationsStatic WHERE station = " + str(each_station['number'])
+                get_max_timestamp = "SELECT MAX(last_update) AS max_num  FROM BikeAndWeather.StationsDynamic WHERE station = " + str(each_station['number'])
                 cursor.execute(get_max_timestamp)
                 result = cursor.fetchone()
             max_timestamp = result[0]
@@ -48,13 +48,13 @@ for filename in sorted(os.listdir(directory)):
                 max_timestamp = 0
             max_timestamp = float(max_timestamp)
         
-            if (each_station['last_update']/1000) > max_timestamp: # dividing by 1000 converts time stamp into seconds, from milliseconds (conventional)
+            if (each_station['last_update']/1000) > max_timestamp: # dividing by 1000 converts time stamp into seconds - from milliseconds (conventional)
                 
                 with connection.cursor() as cursor:
                     # Create a new record
-                    sql = "INSERT INTO `StationsStatic` (`station`, `name`, `address`,`lat`, `lng`, `banking`, `bonus`, `contract_name`, `bike_stands`) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)"
-                    cursor.execute(sql, (each_station['number'], each_station['name'], each_station['address'], each_station['position']['lat'],  each_station['position']['lng'], each_station['banking'],each_station['bonus'], each_station['contract_name'],each_station['bike_stands']))
-        
+                    sql = "INSERT INTO `StationsDynamic` (`station`, `status`, `available_bike_stands`,`available_bikes`, `last_update`) VALUES (%s, %s, %s, %s, %s)"
+                    cursor.execute(sql, (each_station['number'], each_station['status'], each_station['available_bike_stands'], each_station['available_bikes'],(each_station['last_update']/1000)))
+                
                     # connection is not autocommit by default. Therefore commit to save
                     # changes.
                     connection.commit()

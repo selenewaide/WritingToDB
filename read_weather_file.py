@@ -39,7 +39,7 @@ for filename in sorted(os.listdir(directory)):
         # gets the max timestamp in the DB - 
         # to avoid duplicates from previous files read in
         with connection.cursor() as cursor:
-            get_max_timestamp = "SELECT MAX(dt) AS max_num  FROM BikeAndWeather.WeatherJSONCopy"
+            get_max_timestamp = "SELECT MAX(dt) AS max_num  FROM BikeAndWeather.WeatherJSON"
             cursor.execute(get_max_timestamp)
             result = cursor.fetchone()
         max_timestamp = result[0]
@@ -52,13 +52,13 @@ for filename in sorted(os.listdir(directory)):
             
             with connection.cursor() as cursor:
                 # Create a new record
-                sql = "INSERT INTO `WeatherJSONCopy` (`dt`, `main`, `description`,`icon`, `temp`, `json`) VALUES (%s, %s, %s, %s, %s, %s)"
+                sql = "INSERT INTO `WeatherJSON` (`dt`, `main`, `description`,`icon`, `temp`, `json`) VALUES (%s, %s, %s, %s, %s, %s)"
                 cursor.execute(sql, (data_from_file['dt'], data_from_file['weather'][0]['main'], data_from_file['weather'][0]['description'], data_from_file['weather'][0]['icon'], data_from_file['main']['temp'], json.dumps(data_from_file)))
     
                 # connection is not autocommit by default. Therefore commit to save
                 # changes.
                 connection.commit()
         else:
-            print("Skipping station this file as the timestamp is a duplicate")
+            print("Skipping this file as the timestamp is a duplicate")
     
     
