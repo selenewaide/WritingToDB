@@ -53,7 +53,7 @@ for filename in sorted(os.listdir(directory)):
             with connection.cursor() as cursor:
                 # Create a new record
                 sql = "INSERT INTO `WeatherJSONCopy` (`dt`, `main`, `description`,`icon`, `temp`, `json`) VALUES (%s, %s, %s, %s, %s, %s)"
-                cursor.execute(sql, (data_from_file['dt'], data_from_file['weather'][0]['main'], data_from_file['weather'][0]['description'], data_from_file['weather'][0]['icon'], data_from_file['main']['temp'], data_from_file))
+                cursor.execute(sql, (data_from_file['dt'], data_from_file['weather'][0]['main'], data_from_file['weather'][0]['description'], data_from_file['weather'][0]['icon'], data_from_file['main']['temp'], json.dumps(data_from_file)))
     
                 # connection is not autocommit by default. Therefore commit to save
                 # changes.
