@@ -1,9 +1,9 @@
+#!/usr/bin/env python3
+
 '''
 Reads each bike JSON file, and writes data into the static station table.
 Checks for duplicate station/timestamp combinations and ignores these.
 '''
-
-#!/usr/bin/env python3
 
 import json
 import os
