@@ -38,18 +38,20 @@ for filename in sorted(os.listdir(directory)):
         
         # gets the max timestamp for each station - to avoid duplicates from previous files read in
         for each_station in data_from_file:
-            with connection.cursor() as cursor:
-                get_max_timestamp = "SELECT MAX(last_update) AS max_num  FROM BikeAndWeather.StationsStatic WHERE station = " + str(each_station['number'])
-                cursor.execute(get_max_timestamp)
-                result = cursor.fetchone()
-            max_timestamp = result[0]
-            
-            if max_timestamp is None:
-                max_timestamp = 0
-            max_timestamp = float(max_timestamp)
-        
-            if (each_station['last_update']/1000) > max_timestamp: # dividing by 1000 converts time stamp into seconds, from milliseconds (conventional)
-                
+        #=======================================================================
+        #     with connection.cursor() as cursor:
+        #         get_max_timestamp = "SELECT MAX(last_update) AS max_num  FROM BikeAndWeather.StationsStatic WHERE station = " + str(each_station['number'])
+        #         cursor.execute(get_max_timestamp)
+        #         result = cursor.fetchone()
+        #     max_timestamp = result[0]
+        #     
+        #     if max_timestamp is None:
+        #         max_timestamp = 0
+        #     max_timestamp = float(max_timestamp)
+        # 
+        #     if (each_station['last_update']/1000) > max_timestamp: # dividing by 1000 converts time stamp into seconds, from milliseconds (conventional)
+        #         
+        #=======================================================================
                 with connection.cursor() as cursor:
                     # Create a new record
                     sql = "INSERT INTO `StationsStatic` (`station`, `name`, `address`,`lat`, `lng`, `banking`, `bonus`, `contract_name`, `bike_stands`) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)"
@@ -58,7 +60,9 @@ for filename in sorted(os.listdir(directory)):
                     # connection is not autocommit by default. Therefore commit to save
                     # changes.
                     connection.commit()
-            else:
-                print("Skipping station ", each_station['number'], " because ", max_timestamp, " is greater than ", each_station['last_update']/1000)
-        
-        
+        #=======================================================================
+        #     else:
+        #         print("Skipping station ", each_station['number'], " because ", max_timestamp, " is greater than ", each_station['last_update']/1000)
+        # 
+        # 
+        #=======================================================================
