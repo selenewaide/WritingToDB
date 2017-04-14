@@ -74,6 +74,5 @@ for filename in sorted(os.listdir(directory)):
         
     
    
-            date_and_hour_check[each_station['number']] = datetime.datetime.fromtimestamp(
-                            (each_station_date_and_hour_check)
-                        ).strftime('%Y-%m-%d %H')   
+            date_and_hour_check[each_station['number']] = each_station_date_and_hour_check
+                          
