@@ -63,7 +63,7 @@ for filename in sorted(os.listdir(directory)):
                 
                 with connection.cursor() as cursor:
                     # Create a new record
-                    sql = "INSERT INTO `HourlyStationsDynamic` (`station`, `status`, `available_bike_stands`,`available_bikes`, `last_update`, , `date_time`) VALUES (%s, %s, %s, %s, %s)"
+                    sql = "INSERT INTO `HourlyStationsDynamic` (`station`, `status`, `available_bike_stands`,`available_bikes`, `last_update`, `date_time`) VALUES (%s, %s, %s, %s, %s, %s)"
                     cursor.execute(sql, (each_station['number'], each_station['status'], each_station['available_bike_stands'], each_station['available_bikes'],(each_station['last_update']/1000), each_station_date_and_hour_check))
                 
                     # connection is not autocommit by default. Therefore commit to save
